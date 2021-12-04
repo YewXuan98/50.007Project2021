@@ -11,7 +11,7 @@ def read_file(lang):
     test_words = []
 
     for i in range(2):
-        with open(f'{lang}/{data_type[i]}', 'r') as fin:
+        with open(f'{lang}/{data_type[i]}', 'r', encoding="utf8") as fin:
             doc = fin.read().strip()
             blocks = doc.split('\n\n')
 
@@ -54,7 +54,7 @@ def get_unique_words(words):
     return u_words
 
 
-def gen_emission_pairs(u_tags, u_words):
+def generate_emission_pairs(u_tags, u_words):
     emission_pairs = []
 
     for tag, word in zip(u_tags, u_words):
@@ -64,7 +64,7 @@ def gen_emission_pairs(u_tags, u_words):
     return emission_pairs
 
 
-def gen_possible_emission_pairs(u_tags, u_words):
+def generate_possible_emission_pairs(u_tags, u_words):
     return [product(u_tags, u_words)]
 
 
@@ -74,7 +74,7 @@ def count_y(tag, tag_seq_ls):
     return tag_seq_ls_flattened.count(tag)
 
 
-def gen_emission_matrix(tags_unique, words_unique, tag_seq_ls, word_seq_ls, k):
+def generate_emission_matrix(tags_unique, words_unique, tag_seq_ls, word_seq_ls, k):
 
     # create and initialise emission matrix
     emission_matrix = {}
@@ -103,6 +103,29 @@ def gen_emission_matrix(tags_unique, words_unique, tag_seq_ls, word_seq_ls, k):
         emission_matrix[tag]["#UNK#"] = k / (row_sum)
 
     return emission_matrix
+
+
+def generate_transition_matrix(tag_sequences):
+    # get all tags pairs
+    tag_pairs = chain.from_iterable(zip(chain(["START"], tag_sequence), chain(tag_sequence, ["STOP"]))
+                                    for tag_sequence in tag_sequences)
+
+    # count each tag pair
+    transition_matrix = {}
+    for first, second in tag_pairs:
+        if first not in transition_matrix:
+            transition_matrix[first] = {}
+        if second not in transition_matrix[first]:
+            transition_matrix[first][second] = 0
+        transition_matrix[first][second] += 1
+
+    # divide everything by counts
+    for vec in transition_matrix.values():
+        count = sum(vec.values())
+        for k in vec:
+            vec[k] /= count
+
+    return transition_matrix
 
 
 # method to check for the tag corresponding to the best score for the word
@@ -148,13 +171,13 @@ if __name__ == '__main__':
     u_tags, u_tag_w_start_stop = get_unique_tags(tags)
     u_words = get_unique_words(train_words)
 
-    emission_pairs = gen_emission_pairs(tags, train_words)
-    emission_pairs_possible = gen_possible_emission_pairs(
+    emission_pairs = generate_emission_pairs(tags, train_words)
+    emission_pairs_possible = generate_possible_emission_pairs(
         u_tags, u_words)
 
     k = 1
-    emission_matrix = gen_emission_matrix(u_tags, u_words,
-                                          tags, train_words, k)
+    emission_matrix = generate_emission_matrix(u_tags, u_words,
+                                               tags, train_words, k)
 
     test_word_unique = get_sorted_unique_elements(test_words)
 

@@ -43,10 +43,8 @@ def count_y(tag, tag_seq_ls):
 
 
 def count_pairs(pairs):
-    counts = {}
+    counts = defaultdict(lambda: defaultdict(lambda: 0))
     for first, second in pairs:
-        if first not in counts:
-            counts[first] = defaultdict(0)
         counts[first][second] += 1
     return counts
 

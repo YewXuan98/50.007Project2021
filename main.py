@@ -1,4 +1,5 @@
 # import pandas as pd
+import math
 from itertools import chain
 from collections import defaultdict
 
@@ -115,6 +116,54 @@ def get_prediction(test_words_list, emission_matrix, training_word_set):
 def save_prediction(lang, prediction):
     with open(f"{lang}/dev.p2.out", "w") as f:
         f.write(prediction)
+
+
+def safe_log(n):
+    if n == 0:
+        return float("-inf")
+    else:
+        return math.log(n)
+
+
+def viterbi_prediction(observations, emission_matrix, transmission_matrix):
+    # tag -> (log score, sequence)
+    previous_scores = {"START": (0, [])}
+    tags = emission_matrix.keys()
+    for observation in observations:
+
+        # tag -> (log score, sequence)
+        updated_scores = {}
+
+        for tag in tags:
+            emission_score = safe_log(emission_matrix[tag][observation])
+            max_score = float("-inf")
+            max_seq = None
+
+            for previous_tag, (previous_score, previous_seq) in previous_scores.items():
+                transition_score = safe_log(transmission_matrix[previous_tag][tag])
+                score = emission_score + previous_score + transition_score
+                if score > max_score[0]:
+                    max_score = score
+                    max_seq = previous_seq + [tag]
+
+            if max_seq is not None:
+                updated_scores[tag] = (max_score, max_seq)
+
+        previous_scores = updated_scores
+
+    # handle final STOP
+    max_score = float("-inf")
+    max_seq = None
+
+    for previous_tag, (previous_score, previous_seq) in previous_scores.items():
+        transition_score = safe_log(transmission_matrix[previous_tag]["STOP"])
+        score = previous_score + transition_score
+        if score > max_score[0]:
+            max_score = score
+            max_seq = previous_seq
+
+    return max_seq
+
 
 
 if __name__ == '__main__':

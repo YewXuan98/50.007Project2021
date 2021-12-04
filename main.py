@@ -1,5 +1,6 @@
 # import pandas as pd
-from itertools import chain, product
+from itertools import chain
+from collections import defaultdict
 
 lang = ['ES','RU']
 data_type = ['train', 'dev.in']
@@ -35,95 +36,48 @@ def read_file(lang):
     return train_words, tags, test_words
 
 
-def get_sorted_unique_elements(ls):
-    # chain will combine all the many segmented list to combine into one
-    unique_ls = list(set(chain.from_iterable(ls)))
-    unique_ls.sort()
-
-    return unique_ls
-
-
-def get_unique_tags(tags):
-    unique_tags = get_sorted_unique_elements(tags)
-    sorted_tags = ["START"] + unique_tags + ["STOP"]
-    return unique_tags, sorted_tags
-
-
-def get_unique_words(words):
-    u_words = get_sorted_unique_elements(words)
-    return u_words
-
-
-def generate_emission_pairs(u_tags, u_words):
-    emission_pairs = []
-
-    for tag, word in zip(u_tags, u_words):
-        for t, w in zip(tag, word):
-            emission_pairs.append([t, w])
-
-    return emission_pairs
-
-
-def generate_possible_emission_pairs(u_tags, u_words):
-    return [product(u_tags, u_words)]
-
-
 def count_y(tag, tag_seq_ls):
     tag_seq_ls_flattened = [chain.from_iterable(tag_seq_ls)]
 
     return tag_seq_ls_flattened.count(tag)
 
 
-def generate_emission_matrix(tags_unique, words_unique, tag_seq_ls, word_seq_ls, k):
+def count_pairs(pairs):
+    counts = {}
+    for first, second in pairs:
+        if first not in counts:
+            counts[first] = defaultdict(0)
+        counts[first][second] += 1
+    return counts
 
-    # create and initialise emission matrix
-    emission_matrix = {}
-    for tag in tags_unique:
-        emission_matrix_row = {}
-        for word in words_unique:
-            emission_matrix_row[word] = 0.0
-        emission_matrix_row["#UNK#"] = 0.0
-        emission_matrix[tag] = emission_matrix_row
 
-    # population emission matrix with counts
-    for tags, words in zip(tag_seq_ls, word_seq_ls):
-        for tag, word in zip(tags, words):
-            emission_matrix[tag][word] += 1
+def normalise_pair_counts(matrix):
+    for vec in matrix.values():
+        count = sum(vec.values())
+        for k in vec:
+            vec[k] /= count
 
-    # divide cells by sum, to get probability
-    for tag, emission_matrix_row in emission_matrix.items():
-        row_sum = count_y(tag, tag_seq_ls) + k
 
-        # words in training set
-        popped = emission_matrix_row.popitem()
-        for word, cell in emission_matrix_row.items():
-            emission_matrix[tag][word] = cell / row_sum
+def generate_emission_matrix(word_seqs, tag_seqs):
+    k = 1
 
-        # word == #UNK#
-        emission_matrix[tag]["#UNK#"] = k / (row_sum)
+    tag_word_pairs = chain.from_iterable(zip(*seq_pair) for seq_pair in zip(tag_seqs, word_seqs))
 
+    emission_matrix = count_pairs(tag_word_pairs)
+    for tag in emission_matrix:
+        emission_matrix[tag]["#UNK#"] = k
+
+    normalise_pair_counts(emission_matrix)
     return emission_matrix
 
 
 def generate_transition_matrix(tag_sequences):
-    # get all tags pairs
+    # get all tag pairs
     tag_pairs = chain.from_iterable(zip(chain(["START"], tag_sequence), chain(tag_sequence, ["STOP"]))
                                     for tag_sequence in tag_sequences)
 
-    # count each tag pair
-    transition_matrix = {}
-    for first, second in tag_pairs:
-        if first not in transition_matrix:
-            transition_matrix[first] = {}
-        if second not in transition_matrix[first]:
-            transition_matrix[first][second] = 0
-        transition_matrix[first][second] += 1
-
-    # divide everything by counts
-    for vec in transition_matrix.values():
-        count = sum(vec.values())
-        for k in vec:
-            vec[k] /= count
+    transition_matrix = count_pairs(tag_pairs)
+    normalise_pair_counts(transition_matrix)
 
     return transition_matrix
 
@@ -143,15 +97,15 @@ def get_best_tag(word, emission_matrix):
     return y
 
 
-def get_prediction(test_words_list, emission_matrix):
+def get_prediction(test_words_list, emission_matrix, training_word_set):
     output = ""
     for test_list in test_words_list:
         for word in test_list:
             tag_assigned = ""
-            if word in words_not_found_in_test_list:
-                tag_assigned = get_best_tag("#UNK#", emission_matrix)
-            else:
+            if word in training_word_set:
                 tag_assigned = get_best_tag(word, emission_matrix)
+            else:
+                tag_assigned = get_best_tag("#UNK#", emission_matrix)
 
             output += f"{word} {tag_assigned}"
             output += "\n"
@@ -165,23 +119,13 @@ def save_prediction(lang, prediction):
         f.write(prediction)
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     train_words, tags, test_words = read_file(lang[0])
-    u_tags, u_tag_w_start_stop = get_unique_tags(tags)
-    u_words = get_unique_words(train_words)
-
-    emission_pairs = generate_emission_pairs(tags, train_words)
-    emission_pairs_possible = generate_possible_emission_pairs(
-        u_tags, u_words)
 
     k = 1
-    emission_matrix = generate_emission_matrix(u_tags, u_words,
-                                               tags, train_words, k)
+    emission_matrix = generate_emission_matrix(train_words, tags)
 
-    test_word_unique = get_sorted_unique_elements(test_words)
-
-    words_not_found_in_test_list = set(test_word_unique).difference(set(u_words))
-    prediction = get_prediction(test_words, emission_matrix)
+    training_word_set = set(chain.from_iterable(train_words))
+    prediction = get_prediction(test_words, emission_matrix, training_word_set)
 
     save_prediction(lang[0], prediction)

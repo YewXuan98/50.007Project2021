@@ -142,7 +142,7 @@ def viterbi_prediction(observations, emission_matrix, transmission_matrix):
             for previous_tag, (previous_score, previous_seq) in previous_scores.items():
                 transition_score = safe_log(transmission_matrix[previous_tag][tag])
                 score = emission_score + previous_score + transition_score
-                if score > max_score[0]:
+                if score > max_score:
                     max_score = score
                     max_seq = previous_seq + [tag]
 
@@ -158,12 +158,11 @@ def viterbi_prediction(observations, emission_matrix, transmission_matrix):
     for previous_tag, (previous_score, previous_seq) in previous_scores.items():
         transition_score = safe_log(transmission_matrix[previous_tag]["STOP"])
         score = previous_score + transition_score
-        if score > max_score[0]:
+        if score > max_score:
             max_score = score
             max_seq = previous_seq
 
     return max_seq
-
 
 
 if __name__ == '__main__':

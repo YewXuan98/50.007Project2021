@@ -2,7 +2,7 @@
 from itertools import chain
 from collections import defaultdict
 
-lang = ['ES','RU']
+lang = ['ES', 'RU']
 data_type = ['train', 'dev.in']
 
 
@@ -56,9 +56,9 @@ def normalise_pair_counts(matrix):
             vec[k] /= count
 
 
-def generate_emission_matrix(word_seqs, tag_seqs):
-    k = 1
-
+def generate_emission_matrix(word_seqs, tag_seqs, k):
+    """Generates a nested dictionary with the estimated emission parameters.
+    output[tag][word] is the emission param for the given tag, word pair."""
     tag_word_pairs = chain.from_iterable(zip(*seq_pair) for seq_pair in zip(tag_seqs, word_seqs))
 
     emission_matrix = count_pairs(tag_word_pairs)
@@ -70,6 +70,8 @@ def generate_emission_matrix(word_seqs, tag_seqs):
 
 
 def generate_transition_matrix(tag_sequences):
+    """Generates a nested dictionary with the estimated transition parameters.
+    output[tag1][tag2] is the transition param from tag1 to tag2."""
     # get all tag pairs
     tag_pairs = chain.from_iterable(zip(chain(["START"], tag_sequence), chain(tag_sequence, ["STOP"]))
                                     for tag_sequence in tag_sequences)
@@ -95,7 +97,7 @@ def get_best_tag(word, emission_matrix):
     return y
 
 
-def get_prediction(test_words_list, emission_matrix, training_word_set):
+def get_prediction_p1(test_words_list, emission_matrix, training_word_set):
     output = ""
     for test_list in test_words_list:
         for word in test_list:
@@ -112,18 +114,6 @@ def get_prediction(test_words_list, emission_matrix, training_word_set):
     return output
 
 
-def save_prediction(lang, prediction):
-    with open(f"{lang}/dev.p2.out", "w") as f:
+def save_prediction(lang, prediction, part):
+    with open(f"{lang}/dev.p{part}.out", "w") as f:
         f.write(prediction)
-
-
-if __name__ == '__main__':
-    train_words, tags, test_words = read_file(lang[0])
-
-    k = 1
-    emission_matrix = generate_emission_matrix(train_words, tags)
-
-    training_word_set = set(chain.from_iterable(train_words))
-    prediction = get_prediction(test_words, emission_matrix, training_word_set)
-
-    save_prediction(lang[0], prediction)

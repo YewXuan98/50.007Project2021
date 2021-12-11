@@ -52,7 +52,6 @@ def viterbi(
 
 
 if __name__ == '__main__':
-
     for language in lang:
         train_words, tags, test_words = read_file(language)
         t_matrix = generate_transition_matrix(tags)
@@ -65,4 +64,3 @@ if __name__ == '__main__':
             predictions.append(prediction)
 
         save_prediction(test_words, predictions, language, part=2)
-    # print(all_tags)

@@ -103,8 +103,3 @@ def save_prediction(test_words, predictions, lang, part):
             for word, tag in zip(sentence, tags):
                 f.write(f"{word} {tag}\n")
             f.write("\n")
-
-
-# def save_prediction_old(lang, prediction, part):
-#     with open(f"{lang}/dev.p{part}.out", "w") as f:
-#         f.write(prediction)

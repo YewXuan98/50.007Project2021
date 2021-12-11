@@ -12,4 +12,3 @@ if __name__ == '__main__':
             prediction = viterbi(sentence, e_matrix, t_matrix, training_word_set, n=5)
             predictions.append(prediction)
         save_prediction(test_words, predictions, language, part=3)
-    # print(all_tags)

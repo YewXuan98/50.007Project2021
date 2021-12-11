@@ -16,7 +16,6 @@ def get_prediction(test_words_list, emission_matrix, training_word_set):
 
 if __name__ == '__main__':
     for language in lang:
-
         train_words, tags, test_words = read_file(language)
         emission_matrix = generate_emission_matrix(train_words, tags, k=1)
         training_word_set = set(chain.from_iterable(train_words))

@@ -15,11 +15,10 @@ def get_prediction(test_words_list, emission_matrix, training_word_set):
     return output
 
 if __name__ == '__main__':
-    train_words, tags, test_words = read_file(lang[0])
+    for language in lang:
 
-    emission_matrix = generate_emission_matrix(train_words, tags, k=1)
-
-    training_word_set = set(chain.from_iterable(train_words))
-    prediction = get_prediction(test_words, emission_matrix, training_word_set)
-
-    save_prediction(test_words, prediction, lang[0], part=1)
+        train_words, tags, test_words = read_file(language)
+        emission_matrix = generate_emission_matrix(train_words, tags, k=1)
+        training_word_set = set(chain.from_iterable(train_words))
+        prediction = get_prediction(test_words, emission_matrix, training_word_set)
+        save_prediction(test_words, prediction, language, part=1)

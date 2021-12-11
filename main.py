@@ -97,23 +97,14 @@ def get_best_tag(word, emission_matrix):
     return y
 
 
-def get_prediction_p1(test_words_list, emission_matrix, training_word_set):
-    output = ""
-    for test_list in test_words_list:
-        for word in test_list:
-            tag_assigned = ""
-            if word in training_word_set:
-                tag_assigned = get_best_tag(word, emission_matrix)
-            else:
-                tag_assigned = get_best_tag("#UNK#", emission_matrix)
-
-            output += f"{word} {tag_assigned}"
-            output += "\n"
-        output += "\n"
-
-    return output
-
-
-def save_prediction(lang, prediction, part):
+def save_prediction(test_words, predictions, lang, part):
     with open(f"{lang}/dev.p{part}.out", "w") as f:
-        f.write(prediction)
+        for sentence, tags in zip(test_words, predictions):
+            for word, tag in zip(sentence, tags):
+                f.write(f"{word} {tag}\n")
+            f.write("\n")
+
+
+# def save_prediction_old(lang, prediction, part):
+#     with open(f"{lang}/dev.p{part}.out", "w") as f:
+#         f.write(prediction)

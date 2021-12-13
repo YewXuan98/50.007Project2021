@@ -42,12 +42,6 @@ In practice our log score (when there is a feasible solution) is in the range `[
 so this should not affect the cases where a feasible solution can be found.
 
 # Part 4
-Now, based on the training and development set, think of a better design for developing an im- proved sentiment analysis
-system for tweets using any model you like. Please explain clearly the model/method that you used for designing the new
-system. We will check your code and may call you for an interview if we have questions about your code. Please run your
-system on the development set RU/dev.in and ES/dev.in. Write your outputs to RU/dev.p4.out and ES/dev.p4.out. Report the
-precision, recall and F scores of your new systems for these two languages.
-(10 points)
 
 A disadvantage of the HMM is that it only remembers the previous state. In real life, when we interpret the sentiment of
 a word we use much more of the surrounding context to make our judgements.

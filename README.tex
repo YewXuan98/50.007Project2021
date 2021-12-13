@@ -1,0 +1,232 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\author{}
+\date{}
+
+\begin{document}
+
+To run script, cd into the root directory of the project \& type the
+following command:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{./script.sh}
+\end{Highlighting}
+\end{Shaded}
+
+Alternatively (or if using a non-unix system), in the root directory of
+the project, run the following:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{python3}\NormalTok{ hmm\_part\_1.py}
+\ExtensionTok{python3}\NormalTok{ hmm\_part\_2.py}
+\ExtensionTok{python3}\NormalTok{ hmm\_part\_3.py}
+\ExtensionTok{python3}\NormalTok{ hmm\_part\_4.py}
+\ExtensionTok{python3}\NormalTok{ hmm\_part\_4b.py}
+
+\CommentTok{\# run on test data}
+\ExtensionTok{python3}\NormalTok{ hmm\_part\_4.py }\AttributeTok{{-}t}\NormalTok{ train }\AttributeTok{{-}i}\NormalTok{ test.in}
+
+\ExtensionTok{python3}\NormalTok{ EvalScript/evalResult.py RU/dev.p1.out RU/dev.out }\OperatorTok{\textgreater{}}\NormalTok{ RU/1.out}
+\ExtensionTok{python3}\NormalTok{ EvalScript/evalResult.py ES/dev.p1.out ES/dev.out }\OperatorTok{\textgreater{}}\NormalTok{ ES/1.out}
+
+\CommentTok{\# repeat for all the output files}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{part-2-3}{%
+\section{Part 2 \& 3}\label{part-2-3}}
+
+In our transition step, instead of only keeping track of the best
+sequence found, we keep track of the all possible sequences occuring
+after the previous step, and we truncate each step to the top \texttt{i}
+values (\texttt{i\ =\ 1} in part 2 and \texttt{i\ =\ 5} in part 3).
+
+We use log likelihood to avoid floating point precision issues.
+
+To handle the cases where no path can be found with a score of more than
+0 (which happens for example when a word we have only observed as
+\texttt{I-positive} occurs after a word only observed as \texttt{O},
+since $t(\texttt{I-positive} | \texttt{O}) = 0$), we set $\log(0)$
+to be a large negative number ($-1000000$) so that in such cases,
+we consider the ``least impossible value'' (likelihood scores where we
+have to multiply by the least number of zeroes, followed by those with
+the same number of zeroes where we would have a higher score if we did
+not multiply by those zeroes).
+
+In practice our log score (when there is a feasible solution) is in the
+range $[-10^3, 0]$, so this should not affect the cases
+where a feasible solution can be found.
+
+\hypertarget{part-4}{%
+\section{Part 4}\label{part-4}}
+
+Now, based on the training and development set, think of a better design
+for developing an im- proved sentiment analysis system for tweets using
+any model you like. Please explain clearly the model/method that you
+used for designing the new system. We will check your code and may call
+you for an interview if we have questions about your code. Please run
+your system on the development set RU/dev.in and ES/dev.in. Write your
+outputs to RU/dev.p4.out and ES/dev.p4.out. Report the precision, recall
+and F scores of your new systems for these two languages. (10 points)
+
+A disadvantage of the HMM is that it only remembers the previous state.
+In real life, when we interpret the sentiment of a word we use much more
+of the surrounding context to make our judgements.
+
+Hence we extend the HMM by hypothesizing that each new state does not
+solely depend on the previous state, but also the state before it. In
+this model, instead of having transmission parameters
+\(t(y_n | y_{n-1})\) we have a new transmission parameter
+\(t(y_n | y_{n-1}, y_{n-2})\).
+
+To find the tag sequence that gives us the maximum score, we extend
+Viterbi's algorithm to keep track of the maximum score so far given the
+current tag and the previous tag. Letting this be
+\(b_{i, y_i, y_{i-1}}\), we have the recurrence
+
+\[
+b_{i, y_i, y_{i-1}} = \max_{y_{i-2}} b_{i-1, y_{i-1}, y_{i-2}} e(x_i | y_i) t(y_i | y_{i-1}, y_{i-2})
+\]
+
+In addition, we no longer try to handle unknown words in the same way as
+before. This is because there are a lot more values tagged as \texttt{O}
+than there are for instance \texttt{I-negative}, and because we estimate
+the emission parameters for unknown words as
+$e(\texttt{\#UNK\#} | Y) = \frac{1}{\text{Count}(Y)}$ the parameter
+$e(\texttt{\#UNK\#} | \texttt{O})$ is a lot less than the parameter
+$e(\texttt{\#UNK\#} | \texttt{I-negative})$. In practice there is not
+much reason for the assignment of these scores, and by handling each of
+them as ``impossible'' cases (as explained in part 2/3) we are
+effectively assigning them the same emission parameters for each
+possible tag. We have found that our F values increase quite
+dramatically due to this change, as realistically we should expect that
+most unknown values should be tagged as \texttt{O} (rather than as the
+other tags, which are much rarer).
+
+Our Sentiment F scores improve on part 2 by about 0.2 in their
+evaluation of both the ES and RU development sets.
+
+\begin{verbatim}
+# ES
+
+#Entity in gold data: 255
+#Entity in prediction: 215
+
+#Correct Entity : 139
+Entity  precision: 0.6465
+Entity  recall: 0.5451
+Entity  F: 0.5915
+
+#Correct Sentiment : 112
+Sentiment  precision: 0.5209
+Sentiment  recall: 0.4392
+Sentiment  F: 0.4766
+
+# RU
+
+#Entity in gold data: 461
+#Entity in prediction: 353
+
+#Correct Entity : 239
+Entity  precision: 0.6771
+Entity  recall: 0.5184
+Entity  F: 0.5872
+
+#Correct Sentiment : 163
+Sentiment  precision: 0.4618
+Sentiment  recall: 0.3536
+Sentiment  F: 0.4005
+\end{verbatim}
+
+We have attempted to extend this model such that our transitions depend
+on the previous 3 states instead (as seen in the files labeled part 4b),
+but we have found that this does not meaningfully affect our F scores.
+
+\end{document}

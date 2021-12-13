@@ -19,10 +19,4 @@ for j in "${test[@]}" ; do
   echo "=================================="
   echo "Running hmm_part_$j.py for test.in"
   python3 hmm_part_$j.py -t train -i test.in
-  for lang in "${langs[@]}" ; do
-    echo "=================================="
-    echo "Checking ${lang}/t$j.txt"
-    python3 EvalScript/evalResult.py ${lang}/dev.out ${lang}/test.p$j.out > ${lang}/t$j.txt
-    cat ${lang}/t$j.txt
-  done
 done

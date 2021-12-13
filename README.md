@@ -1,11 +1,45 @@
 To run script, cd into the root directory of the project & type the following command:
-```angular2html
+```bash
 ./script.sh
 ```
 
+Alternatively (or if using a non-unix system), in the root directory of the project, run the following:
+
+```bash
+python3 hmm_part_1.py
+python3 hmm_part_2.py
+python3 hmm_part_3.py
+python3 hmm_part_4.py
+python3 hmm_part_4b.py
+
+# run on test data
+python3 hmm_part_4.py -t train -i test.in
+
+python3 EvalScript/evalResult.py RU/dev.p1.out RU/dev.out > RU/1.out
+python3 EvalScript/evalResult.py ES/dev.p1.out ES/dev.out > ES/1.out
+
+# repeat for all the output files
+```
+
 # Part 2 & 3
-We have merged pt 2 and 3 of the HMM, by generating a list of i outputs and sorting them in order, where i = 1 in pt 2
-and 5 in pt 3!
+
+In our transition step, instead of only keeping track of the best sequence found,
+we keep track of the all possible sequences occuring after the previous step,
+and we truncate each step to the top `i` values (`i = 1` in part 2 and `i = 5` in part 3).
+
+We use log likelihood to avoid floating point precision issues.
+
+To handle the cases where no path can be found with a score of more than 0
+(which happens for example when a word we have only observed as `I-positive`
+occurs after a word only observed as `O`, since `t(I-positive|O) == 0`),
+we set `log(0)` to be a large negative number (`-1000000`)
+so that in such cases, we consider the "least impossible value"
+(likelihood scores where we have to multiply by the least number of zeroes,
+followed by those with the same number of zeroes
+where we would have a higher score if we did not multiply by those zeroes).
+
+In practice our log score (when there is a feasible solution) is in the range `[-1000, 0]`,
+so this should not affect the cases where a feasible solution can be found.
 
 # Part 4
 Now, based on the training and development set, think of a better design for developing an im- proved sentiment analysis
@@ -29,7 +63,19 @@ score so far given the current tag and the previous tag. Letting this be $b_{i, 
 b_{i, y_i, y_{i-1}} = \max_{y_{i-2}} b_{i-1, y_{i-1}, y_{i-2}} e(x_i | y_i) t(y_i | y_{i-1}, y_{i-2})
 \]
 
-We found that by doing this, our Sentiment F scores improve by about 0.2 in their evaluation of both the ES and RU development sets.
+In addition, we no longer try to handle unknown words in the same way as before.
+This is because there are a lot more values tagged as `O` than there are for instance `I-negative`,
+and because we estimate the emission parameters for unknown words as
+`e("#UNK" | Y) = 1/Count(Y)`
+the parameter `e("#UNK#" | O)` is a lot less
+than the parameter `e("#UNK" | I-negative)`. In practice there is not much reason for the assignment
+of these scores, and by handling each of them as "impossible" cases (as explained in part 2/3)
+we are effectively assigning them the same emission parameters for each possible tag.
+We have found that our F values increase quite dramatically due to this change,
+as realistically we should expect that most unknown values should be
+tagged as `O` (rather than as the other tags, which are much rarer).
+
+Our Sentiment F scores improve on part 2 by about 0.2 in their evaluation of both the ES and RU development sets.
 
 ```
 # ES
@@ -63,5 +109,5 @@ Sentiment  recall: 0.3536
 Sentiment  F: 0.4005
 ```
 
-We have attempted to extend this model such that our transitions depend on the previous 3 states instead, but
-we have found that this does not meaningfully affect our F scores.
+We have attempted to extend this model such that our transitions depend on the previous 3 states instead (as seen in the files labeled part 4b),
+but we have found that this does not meaningfully affect our F scores.

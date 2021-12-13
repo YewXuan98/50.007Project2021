@@ -1,4 +1,6 @@
-from hmm_part_2 import *
+from itertools import chain
+from main import read_file, generate_emission_matrix, generate_transition_matrix, lang, save_prediction
+from hmm_part_2 import viterbi
 
 if __name__ == '__main__':
     for language in lang:

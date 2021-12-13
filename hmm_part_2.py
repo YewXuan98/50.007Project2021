@@ -1,6 +1,5 @@
 from typing import List, Dict, Union, Set, Tuple
-
-from main import *
+from main import read_file, generate_emission_matrix, generate_transition_matrix, lang, save_prediction
 from math import log
 
 

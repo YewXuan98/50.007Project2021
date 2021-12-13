@@ -1,5 +1,6 @@
 from typing import List, Dict, Union, Set, Tuple
-from main import *
+from collections import defaultdict
+from main import read_file, generate_emission_matrix, lang, save_prediction, normalise_pair_counts
 from itertools import chain
 from hmm_part_2 import safe_log
 
@@ -56,7 +57,6 @@ def viterbi(
         training_word_set: Set[str],
         n: int = 1
 ) -> List[str]:
-    # score, sequence = best_score[idx][prev][prev_prev]
     best_score: List[Dict[str, Dict[str, Dict[str, Tuple[float, List[str]]]]]]
     best_score = [{"START": {"START": {"START": (0, [])}}}]
     for idx, word in enumerate(sentence):
@@ -64,7 +64,7 @@ def viterbi(
             word = "#UNK#"
         inter_score = {}
         for new_tag in e_matrix.keys():
-            new_best = find_best(sentence[idx], new_tag, best_score[idx], e_matrix, t_matrix)
+            new_best = find_best(word, new_tag, best_score[idx], e_matrix, t_matrix)
             inter_score[new_tag] = new_best
         best_score.append(inter_score)
     best_seqs = chain.from_iterable(x.values()

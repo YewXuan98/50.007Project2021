@@ -1,0 +1,13 @@
+
+#Entity in gold data: 461
+#Entity in prediction: 702
+
+#Correct Entity : 26
+Entity  precision: 0.0370
+Entity  recall: 0.0564
+Entity  F: 0.0447
+
+#Correct Sentiment : 10
+Sentiment  precision: 0.0142
+Sentiment  recall: 0.0217
+Sentiment  F: 0.0172

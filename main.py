@@ -1,12 +1,18 @@
 # import pandas as pd
 from itertools import chain
 from collections import defaultdict
+import argparse
 
 lang = ['ES', 'RU']
-data_type = ['train', 'dev.in']
-
 
 def read_file(lang):
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-t", dest="train_in", help="train file")
+    parser.add_argument("-i", dest="test_in", help="input file")
+    args = parser.parse_args()
+    train_in = args.train_in
+    test_in = args.test_in
+    data_type = [train_in, test_in]
     train_words = []
     tags = []
     test_words = []
@@ -33,7 +39,7 @@ def read_file(lang):
                         ws.append(w)
                     test_words.append(ws)
 
-    return train_words, tags, test_words
+    return train_words, tags, test_words, test_in
 
 
 def count_y(tag, tag_seq_ls):
@@ -97,9 +103,16 @@ def get_best_tag(word, emission_matrix):
     return y
 
 
-def save_prediction(test_words, predictions, lang, part):
-    with open(f"{lang}/dev.p{part}.out", "w") as f:
-        for sentence, tags in zip(test_words, predictions):
-            for word, tag in zip(sentence, tags):
-                f.write(f"{word} {tag}\n")
-            f.write("\n")
+def save_prediction(test_words, predictions, lang, part, test_in):
+    if test_in == 'dev.in':
+        with open(f"{lang}/dev.p{part}.out", "w") as f:
+            for sentence, tags in zip(test_words, predictions):
+                for word, tag in zip(sentence, tags):
+                    f.write(f"{word} {tag}\n")
+                f.write("\n")
+    elif test_in == 'test.in':
+        with open(f"{lang}/test.p{part}.out", "w") as f:
+            for sentence, tags in zip(test_words, predictions):
+                for word, tag in zip(sentence, tags):
+                    f.write(f"{word} {tag}\n")
+                f.write("\n")

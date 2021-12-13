@@ -1,6 +1,7 @@
 from typing import List, Dict, Union, Set, Tuple
 from main import read_file, generate_emission_matrix, generate_transition_matrix, lang, save_prediction
 from math import log
+from itertools import chain
 
 
 def safe_log(n):
@@ -52,7 +53,7 @@ def viterbi(
 
 if __name__ == '__main__':
     for language in lang:
-        train_words, tags, test_words = read_file(language)
+        train_words, tags, test_words, filein = read_file(language)
         t_matrix = generate_transition_matrix(tags)
         e_matrix = generate_emission_matrix(train_words, tags, k=1)
         training_word_set = set(chain.from_iterable(train_words))
@@ -62,4 +63,4 @@ if __name__ == '__main__':
             prediction = viterbi(sentence, e_matrix, t_matrix, training_word_set)
             predictions.append(prediction)
 
-        save_prediction(test_words, predictions, language, part=2)
+        save_prediction(test_words, predictions, language, 2, filein)

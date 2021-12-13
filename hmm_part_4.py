@@ -55,8 +55,6 @@ def viterbi(
     best_score: List[Dict[str, Dict[str, Tuple[float, List[str]]]]]
     best_score = [{"START": {"START": (0, [])}}]
     for idx, word in enumerate(sentence):
-        if word not in training_word_set:
-            word = "#UNK#"
         inter_score = {}
         for new_tag in e_matrix.keys():
             new_best = find_best(word, new_tag, best_score[idx], e_matrix, t_matrix)
